@@ -19,6 +19,19 @@ exports.read = (req, res) => {
     return res.json(req.product)
 }
 
+exports.remove = (req, res) => {
+    let product = req.product;
+    product.remove((err, deletedProduct) => {
+        if (err) return res.status(400).json({
+            error: errorHandler(err)
+        })
+
+        res.json({
+            "Message": "Product deleted successfully!!"
+        })
+    })
+}
+
 exports.create = (req, res) => {
     //we cannot use req.body as we will be saving photo from the forms.
     //We will use formidable package for handling image. 
