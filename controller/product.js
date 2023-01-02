@@ -17,11 +17,25 @@ exports.create = (req, res) => {
     form.parse(req, (err, fields, files) => {
         if (err) return res.status(400).json({ error: "Image could not be uploaded!!" })
 
+        //Check for all the fields
+        const { name, description, price, category, shipping, quantity } = fields
+
+        if (!name || !description || !price || !category || !shipping || !quantity) {
+            res.json({
+                error: "All fields are required!!"
+            })
+        }
+
         let product = new Product(fields)
 
         //files."name" -> name depends on how the data is been send from the client side (if it is name of image then here it has to be the same.)
         if (files.photo) {
             console.log("files.photo: ", files.photo)
+            //File sizes:
+            //1kb = 1000
+            //1mb = 1000000
+
+            //Here we make sure that the file is less than 1 mb.
             if (files.photo.size > 1000000) {
                 return res.status(400).json({
                     error: "Image should be less than 1mb in size",
