@@ -4,6 +4,21 @@ const fs = require('fs')
 const Product = require("../models/product")
 const { errorHandler } = require('../helpers/dbErrorHandler')
 
+exports.productById = (req, res, next, id) => {
+    Product.findById(id).exec((err, product) => {
+        if (err) return res.status(400).json({ error: "Product not Found!!" })
+
+        req.product = product
+        next()
+    })
+}
+
+exports.read = (req, res) => {
+    //Photos are large in size and that is the only reason it is not been send here.
+    req.product.photo = undefined;
+    return res.json(req.product)
+}
+
 exports.create = (req, res) => {
     //we cannot use req.body as we will be saving photo from the forms.
     //We will use formidable package for handling image. 
