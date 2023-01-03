@@ -1,6 +1,5 @@
 const Category = require('../models/category')
 const { errorHandler } = require('../helpers/dbErrorHandler')
-const category = require('../models/category')
 
 exports.create = (req, res) => {
     const category = new Category(req.body)
@@ -56,6 +55,4 @@ exports.list = (req, res) => {
 
         res.json(data)
     })
-
-
 }
