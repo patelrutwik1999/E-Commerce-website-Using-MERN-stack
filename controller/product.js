@@ -32,6 +32,54 @@ exports.remove = (req, res) => {
     })
 }
 
+exports.update = (req, res) => {
+    //All the form data will be available from new Formidable incoming form.
+    let form = new formidable.IncomingForm();
+
+    form.keepExtensions = true
+
+    form.parse(req, (err, fields, files) => {
+        if (err) return res.status(400).json({ error: "Image could not be uploaded!!" })
+
+        //Check for all the fields
+        const { name, description, price, category, shipping, quantity } = fields
+
+        if (!name || !description || !price || !category || !shipping || !quantity) {
+            res.json({
+                error: "All fields are required!!"
+            })
+        }
+
+        let product = req.product
+        //lodash is used effieciently when we need to update the data.
+        product = _.extend(product, fields)
+
+        //files."name" -> name depends on how the data is been send from the client side (if it is name of image then here it has to be the same.)
+        if (files.photo) {
+            console.log("files.photo: ", files.photo)
+            //File sizes:
+            //1kb = 1000
+            //1mb = 1000000
+
+            //Here we make sure that the file is less than 1 mb.
+            if (files.photo.size > 1000000) {
+                return res.status(400).json({
+                    error: "Image should be less than 1mb in size",
+                })
+            }
+
+            product.photo.data = fs.readFileSync(files.photo.filepath)
+            product.photo.contentType = files.photo.mimetype
+        }
+
+        product.save((err, result) => {
+            if (err) return res.status(400).json({ error: errorHandler })
+
+            res.json(result)
+        })
+    })
+}
+
 exports.create = (req, res) => {
     //we cannot use req.body as we will be saving photo from the forms.
     //We will use formidable package for handling image. 
