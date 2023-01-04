@@ -3,6 +3,7 @@ const _ = require('lodash')
 const fs = require('fs')
 const Product = require("../models/product")
 const { errorHandler } = require('../helpers/dbErrorHandler')
+const product = require('../models/product')
 
 exports.productById = (req, res, next, id) => {
     Product.findById(id).exec((err, product) => {
@@ -148,6 +149,25 @@ exports.list = (req, res) => {
         .limit(limit)
         .exec((err, products) => {
             if (err) return res.status(400).json({ error: "Products not found!!" })
+
+            res.json(products)
+        })
+}
+
+
+/**
+ * It will find the products based on the required product category
+ * Other products that has the same category, will be returned
+ * 
+ */
+exports.listRelated = (req, res) => {
+    let limit = req.query.limit ? req.query.limit : 6
+
+    Product.find({ _id: { $ne: req.product }, category: req.product.category })
+        .limit(limit)
+        .populate('category', '_id name')
+        .exec((err, products) => {
+            if (err) return res.status(400).json({ error: "Product Not Found!!" })
 
             res.json(products)
         })

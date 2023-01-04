@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { create, productById, read, remove, update, list } = require("../controller/product");
+const { create, productById, read, remove, update, list, listRelated } = require("../controller/product");
 const { requireSignIn, isAdmin, isAuth } = require('../controller/auth')
 const { userById } = require("../controller/user");
 
@@ -12,6 +12,8 @@ router.delete('/product/:productId/:userId', requireSignIn, isAuth, isAdmin, rem
 router.put('/product/:productId/:userId', requireSignIn, isAuth, isAdmin, update)
 
 router.get('/products', list)
+
+router.get('/products/related/:productId', listRelated)
 
 //When there is a parameter call, we need to call userById method.
 router.param("userId", userById);
