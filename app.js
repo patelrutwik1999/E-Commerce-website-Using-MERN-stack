@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
+const cors = require('cors')
 
 //dotenv -> to use .env file
 require('dotenv').config()
@@ -33,6 +34,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
+//It will able to handle request coming from different routes. Front end will have different route. 3001 -> 8000
+app.use(cors())
 
 // app.get("/", (req, res) => {
 //     res.send("I love Node Js")

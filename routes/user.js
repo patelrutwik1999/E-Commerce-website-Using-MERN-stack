@@ -2,13 +2,16 @@ const express = require('express');
 const router = express.Router()
 
 const { requireSignIn, isAdmin, isAuth } = require('../controller/auth')
-const { userById } = require("../controller/user");
+const { userById, read, update } = require("../controller/user");
 
 router.get('/secret/:userId', requireSignIn, isAuth, isAdmin, (req, res) => {
     res.json({
         user: req.profile
     })
 })
+
+router.get('/user/:userId', requireSignIn, isAuth, read)
+router.put('/user/:userId', requireSignIn, isAuth, update)
 
 //When there is a parameter call, we need to call userById method.
 router.param("userId", userById);
