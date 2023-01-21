@@ -6,12 +6,14 @@ const { errorHandler } = require('../helpers/dbErrorHandler')
 const product = require('../models/product')
 
 exports.productById = (req, res, next, id) => {
-    Product.findById(id).exec((err, product) => {
-        if (err) return res.status(400).json({ error: "Product not Found!!" })
+    Product.findById(id)
+        .populate('category')
+        .exec((err, product) => {
+            if (err) return res.status(400).json({ error: "Product not Found!!" })
 
-        req.product = product
-        next()
-    })
+            req.product = product
+            next()
+        })
 }
 
 exports.read = (req, res) => {
