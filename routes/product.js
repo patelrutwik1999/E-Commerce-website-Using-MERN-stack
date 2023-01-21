@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { create, productById, read, remove, update, list, listRelated, listCategories, listBySearch, photo } = require("../controller/product");
+const { create, productById, read, remove, update, list, listRelated, listCategories, listBySearch, photo, listSearch } = require("../controller/product");
 const { requireSignIn, isAdmin, isAuth } = require('../controller/auth')
 const { userById } = require("../controller/user");
 
@@ -26,6 +26,8 @@ router.param("userId", userById);
 
 //Whenever there will any request with product id, productById will make that product available there.
 router.param("productId", productById);
+
+router.get("/products/search", listSearch);
 
 module.exports = router
 
