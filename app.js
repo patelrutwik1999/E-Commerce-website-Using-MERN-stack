@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
 const cors = require('cors')
+const braintree = require('braintree');
 
 //dotenv -> to use .env file
 require('dotenv').config()
@@ -14,6 +15,7 @@ const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
 const categoryRoutes = require('./routes/category')
 const productRoutes = require('./routes/product')
+const braintreeRoutes = require('./routes/braintree')
 
 //Database connection
 mongoose.connect(
@@ -37,6 +39,7 @@ app.use(expressValidator());
 //It will able to handle request coming from different routes. Front end will have different route. 3001 -> 8000
 app.use(cors())
 
+
 // app.get("/", (req, res) => {
 //     res.send("I love Node Js")
 // })
@@ -46,6 +49,7 @@ app.use("/api", authRoutes)
 app.use('/api', userRoutes)
 app.use('/api', categoryRoutes)
 app.use('/api', productRoutes)
+app.use('/api', braintreeRoutes)
 
 const port = process.env.PORT
 
