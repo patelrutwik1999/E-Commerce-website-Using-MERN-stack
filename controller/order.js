@@ -14,9 +14,9 @@ exports.create = (req, res) => {
 
 exports.listOrders = (req, res) => {
     Order.find()
-        .populate('user', _id, name, address)
+        .populate('user', '_id name address')
         .sort('-createdAt')
-        .exec((err, orders) => {
+        .exec((error, orders) => {
             if (error) return res.status(400).json({ error: errorHandler(error) })
 
             res.json(orders)
