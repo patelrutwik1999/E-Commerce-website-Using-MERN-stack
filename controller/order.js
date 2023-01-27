@@ -22,3 +22,8 @@ exports.listOrders = (req, res) => {
             res.json(orders)
         })
 }
+
+//Send enum values to the front-end
+exports.getStatusValue = (req, res) => {
+    res.json(Order.schema.path('status').enumValues)
+}
